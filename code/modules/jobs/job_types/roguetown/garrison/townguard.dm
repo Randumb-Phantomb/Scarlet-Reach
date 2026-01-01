@@ -12,7 +12,7 @@
 	disallowed_races = list(
 		/datum/species/lamia,
 	)
-	tutorial = "Responsible for the safety of the town and the enforcement of the Grand Duke's law, you are the vanguard of the city faced with punishing those who defy his Royal Majesty. Though you've many lords to obey, as both the Church and the Bailiff have great sway over your life."
+	tutorial = "Whether dragged out of your home by the bailiff or a fresh volunteer seeking to defend your home, you've found yourself on the lowest position of the garrison. Break up petty crimes, solve minor disputes, and try to keep the peace best you can. Maybe one day you can be one of those manor guards..."
 	display_order = JDO_TOWNGUARD
 	whitelist_req = TRUE
 
@@ -53,41 +53,44 @@
 	backr = /obj/item/storage/backpack/rogue/satchel/black
 	backpack_contents = list(/obj/item/signal_horn = 1)
 
-/*Design philosophy: Men and women from various areas of life, from hunters to street-brawlers and more 'veteran' levy-men. Know less skills overall than Bog, but far more specialized.
-Footsman is basically a regular foots-soldier with gear to combat criminals, specializes in maces, polearms, and decent flail/sword training.
-Archer is basically a 'bounty-catcher' in function, less specialized at close-quarters, beyond knives, but very capable of downing a fleeing criminal.*/
+/*Design philosophy: Men and women, conscripted or volunteered, fresh or recently transferred from civilian life, are undertrained and underequipped, and deployed to guard the town.*/
 /datum/advclass/watchman/footsman
-	name = "Watch Footsman"
-	tutorial = "You are a footsman of the Town Watch. Well versed in various close-quarters weapons and aprehending street-savy criminals."
+	name = "Watch Footman"
+	tutorial = "You are a footman of the Town Watch. With cudgel and spear in hand, you are the ender of barfights and chaser of pickpockets, the manner of gates and the first defense the town has against invasion."
 	outfit = /datum/outfit/job/guardsman/footsman
 
 	category_tags = list(CTAG_WATCH)
 
+	traits_applied = list(TRAIT_MEDIUMARMOR)
+
+	subclass_stats = list(
+		STATKEY_STR = 2,// seems kinda lame but remember guardsman bonus!!
+		STATKEY_INT = 1,
+		STATKEY_CON = 1,
+		STATKEY_END = 1
+	)
+
+	subclass_skills = list( // weaponskills used to be expert, but we're bringing them down to jman across the board. no more versatility!
+	/datum/skill/combat/polearms = SKILL_LEVEL_JOURNEYMAN, 
+	/datum/skill/combat/swords = SKILL_LEVEL_JOURNEYMAN,
+	/datum/skill/combat/maces = SKILL_LEVEL_JOURNEYMAN,
+	/datum/skill/combat/axes = SKILL_LEVEL_JOURNEYMAN,
+	/datum/skill/combat/knives = SKILL_LEVEL_JOURNEYMAN,
+	/datum/skill/combat/whipsflails = SKILL_LEVEL_APPRENTICE,
+	/datum/skill/combat/slings = SKILL_LEVEL_NOVICE,
+	/datum/skill/combat/shields = SKILL_LEVEL_JOURNEYMAN,
+	/datum/skill/combat/wrestling = SKILL_LEVEL_EXPERT, // wrestling stays relevant, unarmed goes down. You Have Weapons. Use Them.
+	/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
+	/datum/skill/misc/climbing = SKILL_LEVEL_JOURNEYMAN,
+	/datum/skill/misc/sneaking = SKILL_LEVEL_APPRENTICE,
+	/datum/skill/misc/reading = SKILL_LEVEL_NOVICE,
+	/datum/skill/misc/athletics = SKILL_LEVEL_JOURNEYMAN,
+	/datum/skill/misc/riding = SKILL_LEVEL_NOVICE,
+	/datum/skill/misc/tracking = SKILL_LEVEL_NOVICE,
+	)
+
 /datum/outfit/job/guardsman/footsman/pre_equip(mob/living/carbon/human/H)
 	..()
-	H.adjust_skillrank(/datum/skill/combat/maces, 3, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/axes, 2, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/swords, 2, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/shields, 2, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/polearms, 3, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/whipsflails, 2, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/climbing, 3, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/sneaking, 2, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/riding, 2, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/tracking, 1, TRUE) 
-	H.change_stat("strength", 2)
-	H.change_stat("constitution", 1)
-	H.change_stat("endurance", 1)
-	H.change_stat("speed", 1)
-
-	ADD_TRAIT(H, TRAIT_MEDIUMARMOR, TRAIT_GENERIC)	//You get medium armor training to go with your armor.
 
 	head = /obj/item/clothing/head/roguetown/helmet
 	armor = /obj/item/clothing/suit/roguetown/armor/chainmail
@@ -102,37 +105,41 @@ Archer is basically a 'bounty-catcher' in function, less specialized at close-qu
 
 /datum/advclass/watchman/archer
 	name = "Watch Archer"
-	tutorial = "You are an archer of the Town Watch. Once a hunter, now a man-hunter for your lord. Rooftops, bows, and daggers are your best friend."
+	tutorial = "You are an archer of the Town Watch. Perhaps you were once a hunter, regardless, you've been trained with the bow and told to set your sights both outward to the unknown woods and inward to the streets of your home."
 	outfit = /datum/outfit/job/guardsman/archer
 
 	category_tags = list(CTAG_WATCH)
 
+	//Garrison ranged/speed class. Time to go wild
+	// traits_applied = list(TRAIT_DODGEEXPERT) (removing this per request, can be tweaked later if needed)
+	traits_applied = list(TRAIT_MEDIUMARMOR) // given so they can't have arcyne potential. sorry! you can still dodge if you want.
+	subclass_stats = list(
+		STATKEY_SPD = 3,// +1 spd so they can use their missing DE a little better
+		STATKEY_PER = 2,
+		STATKEY_END = 1
+	)
+	// extra_context = "Chooses between Light Armor (Dodge Expert) & Medium Armor." (why does this exist? you don't choose anything anymore.)
+
+	subclass_skills = list(
+		/datum/skill/combat/swords = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/knives = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/combat/maces = SKILL_LEVEL_JOURNEYMAN, 		// Still have a cugel.
+		/datum/skill/combat/crossbows = SKILL_LEVEL_EXPERT,		//Only effects draw and reload time.
+		/datum/skill/combat/bows = SKILL_LEVEL_EXPERT,			//Only effects draw times.
+		/datum/skill/combat/slings = SKILL_LEVEL_MASTER,
+		/datum/skill/misc/climbing = SKILL_LEVEL_EXPERT,
+		/datum/skill/misc/sneaking = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/misc/athletics = SKILL_LEVEL_EXPERT, // A little better; run fast, weak boy.
+		/datum/skill/combat/wrestling = SKILL_LEVEL_JOURNEYMAN, // lowered to jman. you're a bowman with a dagger, not a brawler. use your speed.
+		/datum/skill/combat/unarmed = SKILL_LEVEL_JOURNEYMAN,
+		/datum/skill/misc/reading = SKILL_LEVEL_NOVICE,
+		/datum/skill/misc/riding = SKILL_LEVEL_NOVICE,
+		/datum/skill/misc/tracking = SKILL_LEVEL_APPRENTICE,
+	)
+
+
 /datum/outfit/job/guardsman/archer/pre_equip(mob/living/carbon/human/H)
 	..()
-	H.adjust_skillrank(/datum/skill/combat/bows, 4, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/crossbows, 4, TRUE)		//Why master? Because all it does is effect draw time, which is strength x skill / 1.2. (Bow is just skill / 1.0). You get poor bonus strength, so you get skill to offset.
-	H.adjust_skillrank(/datum/skill/combat/wrestling, 3, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/unarmed, 3, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/knives, 3, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/maces, 2, TRUE)
-	H.adjust_skillrank(/datum/skill/combat/shields, 1, TRUE)		//Maybe take away? Leaving for now just as a fall-back for non-lethal ability.
-	H.adjust_skillrank(/datum/skill/combat/swords, 1, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/climbing, 4, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/athletics, 3, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/sneaking, 3, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/swimming, 2, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
-	H.adjust_skillrank(/datum/skill/misc/medicine, 1, TRUE)
-	H.adjust_skillrank(/datum/skill/craft/crafting, 1, TRUE)	//For basic crafting; you'll need it due to relegated support role.
-	H.adjust_skillrank(/datum/skill/craft/tanning, 1, TRUE)	//Likely hunter background; very crappy basic skill.
-	H.adjust_skillrank(/datum/skill/misc/tracking, 1, TRUE) 
-	H.change_stat("strength", 1)
-	H.change_stat("perception", 2)
-	H.change_stat("intelligence", 1)		//Gets some int for crafting + feinting, makes up for no medium armor training along with the speed.
-	H.change_stat("constitution", 1)
-	H.change_stat("speed", 2)
-
-	ADD_TRAIT(H, TRAIT_DODGEEXPERT, TRAIT_GENERIC)		//You don't get medium armor training, instead you get a bonus to light armor usage.
 
 	head = /obj/item/clothing/head/roguetown/roguehood/red		//To-do: Make a guard hood come in kingdom's colors.
 	armor = /obj/item/clothing/suit/roguetown/armor/leather		//So they get default-dodge expert usage.
